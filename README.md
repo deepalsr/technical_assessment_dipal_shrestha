@@ -21,8 +21,6 @@ I kept it simple. The core idea is:
 3. Check all remaining edge cases *before* touching any stock- so we never do a partial deduction
 4. If everything passes, deduct and return the updated stock
 
-Order IDs auto-increment starting from 01001. Each new order gets the next ID automatically.
-
 ### Edge Cases handled
 - **Empty order**
 - **Invalid Product ID**
