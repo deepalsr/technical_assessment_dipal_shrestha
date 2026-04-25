@@ -52,5 +52,55 @@ Changes I would make:
 - P1: 8 units
 - P2: 6 units
 
+### Q1 - Allocation Plan
+
+**P1 (need 8):**
+- Take all 8 from Warehouse B 
+- No need to touch warehouse A
+
+**P2 (need 6):**
+- Take all 6 from Warehouse A
+- No need to touch Warehouse B
+
+
+### Q2 - Strategy
+I went with **minimize shipment splits where possible**.
+For P2, Warehouse A had enough its own so I kept it to a single source, simpler logistics. For P1 same reasoning.
+But for delivery speed, it depends on which one is closer or nearest to the user, but not having the data is main reason I went with no pertial deduction keeping the stock as it is in warehouses where the quantity is insufficient.
+
+### Q3 - assumptions
+- Both warehouses have the same shipping cost and delivery time.
+- The order must be fully fullfilled
+- Stock numbers are accurate
+- No constraints regarding the warehouse trasnfer requirements.
+
+---
+
+
+### Section 3 - Quantitative & Logical Reasoning
+
+### Q1 - Caluclation
+In every 2 seconds, 5 parallel orders are processed.
+In 1 minute, there are 60 seconds.
+In 1 minute, 60/2 * 5 = 150 orders/minute
+
+**The system can handle 150 orders/ minutes**
+
+### Q2 - Overload
+
+The system normal capacity is 150 orders/min. When the traffic spikes at 300 orders/min
+The follwing effects occur:
+- The queue grows continuously, 150 orders pile up every minute
+- Response time increases as orders wait longer
+- If there is no queue limit, memory fills up and system crashes
+- If there is a limit, new orders start getting rejected.
+
+The failure of mode is either an oit of memory crash or a flood  of rejected/timed-out request- depending on how queue is set.
+
+### Q3 -Improvement
+
+**Add more parallel workers.**
+ If we go from 5 to 10 workers at the same rate, throughput doubles to exactly where we want. So my suggestion is horizontal scaling. This helps because we are dealign with a throughput issue here, and we dont need to change our system. This is like adding more procesors/threads.
+
 
 
