@@ -1,9 +1,9 @@
-# constant data for products and order
 products = [
-    {"product_id": "P1", "name": "Shampoo", "stock": 10},
-    {"product_id": "P2", "name": "Soap", "stock": 20},
-    {"product_id":"P3", "name": "Toothpaste", "stock": 15}
+    {"product_id": "P1", "name": "Shampoo",    "stock": 10},
+    {"product_id": "P2", "name": "Soap",       "stock": 20},
+    {"product_id": "P3", "name": "Toothpaste", "stock": 15}
 ]
+
 order = {
     "order_id": "O1001",
     "items": [
@@ -12,76 +12,65 @@ order = {
     ]
 }
 
+
 def process_order(products, order):
-    # Create a product inventory dictionary for quick lookup
     inventory = {p["product_id"]: p for p in products}
-    items = order.get ("items", [])
+    items = order.get("items", [])
 
-    #Edge case: No items in the order
     if not items:
-        return {"status": "error","message": "No items in the order."}
+        return {"status": "error", "message": "Order has no items."}
 
-    #edge case: Duplicate product_id in the order
     seen = set()
     for item in items:
-        pid = item['product_id']
-        if  pid in seen:
-            return {"status": "error", "message": f"Duplicate product_id {pid} in order."}
+        pid = item["product_id"]
+        if pid in seen:
+            return {"status": "error", "message": f"Duplicate product ID '{pid}' in order."}
         seen.add(pid)
 
-    # Check stock availability for each item
     for item in items:
         pid = item["product_id"]
-        qty = item ["quantity"]
+        qty = item["quantity"]
+
         if pid not in inventory:
-            return {"status": "error", "message": f"Product {pid} not found."}
+            return {"status": "error", "message": f"Product '{pid}' does not exist."}
 
         if inventory[pid]["stock"] < qty:
-            name= inventory[pid]["name"]
+            name = inventory[pid]["name"]
             available = inventory[pid]["stock"]
-            return {"status": "error",
-            "message": f"Insufficient stock for {name}. Available: {available}, Requested: {qty}"
+            return {
+                "status": "error",
+                "message": f"Not enough stock for {name}. Available: {available}, Requested: {qty}"
             }
 
-    # If all checks pass, process the order
     for item in items:
         inventory[item["product_id"]]["stock"] -= item["quantity"]
 
     updated_stock = [
         {"product_id": p["product_id"], "name": p["name"], "stock": p["stock"]}
         for p in products
-        ]
+    ]
 
-    return {"status": "success", "message": "Order processed successfully.", "updated_stock": updated_stock}
-order_counter = 1001
-def take_order_from_user():
-    global order_counter
-    choice = input("Do you want to create a new order? (yes/no): ").strip().lower()
-    if choice != "yes":
-        return None
-    order_id = f"O{order_counter}"
-    order_counter += 1
-    print(f"Creating order with ID: {order_id}")
-    items = []
-    while True:
-        product_id = input("Enter product ID (or 'done' to finish): ")
-        if product_id.lower() == "done":
-            break
-        if product_id not in [p["product_id"] for p in products]:
-            return({"status": "error", "message": f"Product ID {product_id} not found. Please try again."})
-        quantity = input(f"\nEnter quantity for {product_id}: ").strip()
-        if not quantity.isdigit() or int(quantity) <= 0:
-            return({"status": "error", "message": "Invalid quantity. Please enter a positive integer."})
-        items.append({"product_id": product_id, "quantity": int(quantity)})
-    return {"order_id": order_id, "items": items}
+    return {
+        "status": "success",
+        "message": f"Order {order['order_id']} processed successfully.",
+        "updated_stock": updated_stock
+    }
 
 
-if __name__ == "__main__":
-    while True:
-        user_order = take_order_from_user()
-        if user_order is None:
-            print("No order created. Exiting.")
-            break
-    result = process_order(products, user_order)
-    print("\nOrder Result:")
-    print(result)
+print("-- Normal order --")
+print(process_order(products, order))
+
+print("\n-- Empty order --")
+print(process_order(products, {"order_id": "O1002", "items": []}))
+
+print("\n-- Product does not exist --")
+print(process_order(products, {"order_id": "O1003", "items": [{"product_id": "P99", "quantity": 1}]}))
+
+print("\n-- Insufficient stock --")
+print(process_order(products, {"order_id": "O1004", "items": [{"product_id": "P1", "quantity": 999}]}))
+
+print("\n-- Duplicate product in order --")
+print(process_order(products, {"order_id": "O1005", "items": [
+    {"product_id": "P1", "quantity": 1},
+    {"product_id": "P1", "quantity": 2}
+]}))
