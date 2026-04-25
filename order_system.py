@@ -56,6 +56,9 @@ def process_order(products, order):
 order_counter = 1001
 def take_order_from_user():
     global order_counter
+    choice = input("Do you want to create a new order? (yes/no): ").strip().lower()
+    if choice != "yes":
+        return None
     order_id = f"O{order_counter}"
     order_counter += 1
     print(f"Creating order with ID: {order_id}")
@@ -64,6 +67,9 @@ def take_order_from_user():
         product_id = input("Enter product ID (or 'done' to finish): ")
         if product_id.lower() == "done":
             break
+        if product_id not in [p["product_id"] for p in products]:
+            print("Invalid product ID. Please try again.")
+            continue
         quantity = input(f"\nEnter quantity for {product_id}: ").strip()
         if not quantity.isdigit() or int(quantity) <= 0:
             print("Invalid quantity. Please enter a positive integer.")
@@ -73,7 +79,11 @@ def take_order_from_user():
 
 
 if __name__ == "__main__":
-    user_order = take_order_from_user()
+    while True:
+        user_order = take_order_from_user()
+        if user_order is None:
+            print("No order created. Exiting.")
+            break
     result = process_order(products, user_order)
     print("\nOrder Result:")
     print(result)
