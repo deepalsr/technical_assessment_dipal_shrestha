@@ -68,12 +68,10 @@ def take_order_from_user():
         if product_id.lower() == "done":
             break
         if product_id not in [p["product_id"] for p in products]:
-            print("Invalid product ID. Please try again.")
-            continue
+            return({"status": "error", "message": f"Product ID {product_id} not found. Please try again."})
         quantity = input(f"\nEnter quantity for {product_id}: ").strip()
         if not quantity.isdigit() or int(quantity) <= 0:
-            print("Invalid quantity. Please enter a positive integer.")
-            continue
+            return({"status": "error", "message": "Invalid quantity. Please enter a positive integer."})
         items.append({"product_id": product_id, "quantity": int(quantity)})
     return {"order_id": order_id, "items": items}
 
