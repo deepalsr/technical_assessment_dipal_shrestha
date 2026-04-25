@@ -48,11 +48,11 @@ def process_order(products, order):
         inventory[item["product_id"]]["stock"] -= item["quantity"]
 
     updated_stock = [
-        {"product_id": p["product_id"], "name": p["name"], "stock": p["product_id"]["stock"]}
+        {"product_id": p["product_id"], "name": p["name"], "stock": p["stock"]}
         for p in products
-]
+        ]
 
-return {"status": "success", "message": "Order processed successfully.", "updated_stock": updated_stock}
+    return {"status": "success", "message": "Order processed successfully.", "updated_stock": updated_stock}
 
 
 if __name__ == "__main__":
@@ -74,4 +74,3 @@ if __name__ == "__main__":
     #Test case: Duplicate product_id in the order
     print("\n Duplicate product_id in the order")
     print(process_order(products, {"order_id": "O1005", "items": [{"product_id": "P1", "quantity": 1}, {"product_id": "P1", "quantity": 2}]}))
-    
