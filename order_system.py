@@ -1,3 +1,4 @@
+# Data for products and an example order
 products = [
     {"product_id": "P1", "name": "Shampoo",    "stock": 10},
     {"product_id": "P2", "name": "Soap",       "stock": 20},
@@ -12,14 +13,16 @@ order = {
     ]
 }
 
-
+# Process the order and update stock levels
 def process_order(products, order):
+    # Create a product lookup for easy access
     inventory = {p["product_id"]: p for p in products}
     items = order.get("items", [])
-
+    # edge case: empty order
     if not items:
         return {"status": "error", "message": "Order has no items."}
-
+    
+    # edge case: duplicate product in order
     seen = set()
     for item in items:
         pid = item["product_id"]
@@ -27,13 +30,16 @@ def process_order(products, order):
             return {"status": "error", "message": f"Duplicate product ID '{pid}' in order."}
         seen.add(pid)
 
+    #validate products and stock
     for item in items:
         pid = item["product_id"]
         qty = item["quantity"]
-
+        
+        # edge case: product does not exist
         if pid not in inventory:
             return {"status": "error", "message": f"Product '{pid}' does not exist."}
-
+        
+        # edge case: insufficient stock
         if inventory[pid]["stock"] < qty:
             name = inventory[pid]["name"]
             available = inventory[pid]["stock"]

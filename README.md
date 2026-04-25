@@ -90,7 +90,7 @@ The follwing effects occur:
 - If there is no queue limit, memory fills up and system crashes
 - If there is a limit, new orders start getting rejected.
 
-The failure of mode is either an oit of memory crash or a flood  of rejected/timed-out request- depending on how queue is set.
+The failure of mode is either an oit of memory crash or a flood  of rejected/timed-out request depending on how queue is set.
 
 ### Q3 -Improvement
 
