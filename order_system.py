@@ -59,13 +59,13 @@ def take_order_from_user():
     items = []
     while True:
         product_id = input("Enter product ID (or 'done' to finish): ")
-        if pid.lower() == "done":
+        if product_id.lower() == "done":
             break
-        quantity = int(input("\nEnter quantity for {pid}: ")).strip()
-        if not qty.isdigit() or int(qty) <= 0:
+        quantity = input(f"\nEnter quantity for {product_id}: ").strip()
+        if not quantity.isdigit() or int(quantity) <= 0:
             print("Invalid quantity. Please enter a positive integer.")
             continue
-        items.append({"product_id": product_id, "quantity": quantity})
+        items.append({"product_id": product_id, "quantity": int(quantity)})
     return {"order_id": order_id, "items": items}
 
 
