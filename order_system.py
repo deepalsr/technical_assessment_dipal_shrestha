@@ -54,23 +54,23 @@ def process_order(products, order):
 
     return {"status": "success", "message": "Order processed successfully.", "updated_stock": updated_stock}
 
+def take_order_from_user():
+    order_id = input("\nEnter order ID: ").strip()
+    items = []
+    while True:
+        product_id = input("Enter product ID (or 'done' to finish): ")
+        if pid.lower() == "done":
+            break
+        quantity = int(input("\nEnter quantity for {pid}: ")).strip()
+        if not qty.isdigit() or int(qty) <= 0:
+            print("Invalid quantity. Please enter a positive integer.")
+            continue
+        items.append({"product_id": product_id, "quantity": quantity})
+    return {"order_id": order_id, "items": items}
+
 
 if __name__ == "__main__":
-    result = process_order(products, order)
+    user_order = take_order_from_user()
+    result = process_order(products, user_order)
+    print("\nOrder Result:")
     print(result)
-
-    # Test case: No items in the order
-    print("\n Empty order")
-    print(process_order(products, {"order_id": "O1002", "items": []}))
-
-    #Test case: Product not found
-    print("\n Product not found")
-    print(process_order(products, {"order_id": "O1003", "items": [{"product_id": "P4", "quantity": 1}]}))
-
-    #Test case: Insufficient stock
-    print("\n Insufficient stock")
-    print(process_order(products, {"order_id": "O1004", "items": [{"product_id": "P1", "quantity": 20}]}))
-
-    #Test case: Duplicate product_id in the order
-    print("\n Duplicate product_id in the order")
-    print(process_order(products, {"order_id": "O1005", "items": [{"product_id": "P1", "quantity": 1}, {"product_id": "P1", "quantity": 2}]}))
