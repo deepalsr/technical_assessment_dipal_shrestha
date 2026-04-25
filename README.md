@@ -8,10 +8,6 @@ python order_system.py
 
 No external dependencies. Just plain Python
 
-Once running:
--Type **yes** to place a new order
--Type anything else to exit the program
-
 ---
 ## Section 1 - Coding Task: Order & Inventory System
 
