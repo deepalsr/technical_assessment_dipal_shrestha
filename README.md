@@ -2,11 +2,12 @@
 This is my repository for the technical assessment
 ## How to Run
 
-'''bash
+```bash
 python order_system.py
-'''
+```
 
 No external dependencies. Just plain Python
+
 Once running:
 -Type **yes** to place a new order
 -Type anything else to exit the program
