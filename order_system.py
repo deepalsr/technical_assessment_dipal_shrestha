@@ -53,9 +53,12 @@ def process_order(products, order):
         ]
 
     return {"status": "success", "message": "Order processed successfully.", "updated_stock": updated_stock}
-
+order_counter = 1001
 def take_order_from_user():
-    order_id = input("\nEnter order ID: ").strip()
+    global order_counter
+    order_id = f"O{order_counter}"
+    order_counter += 1
+    print(f"Creating order with ID: {order_id}")
     items = []
     while True:
         product_id = input("Enter product ID (or 'done' to finish): ")
